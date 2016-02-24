@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+	<bean id="data"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver">
+		</property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/banco">
+		</property>
+		<property name="username" value="root"></property>
+		<property name="password" value="root"></property>
+	</bean>
+    <!-- configuración capa de persistencia JPA-->
+    <bean id="entityFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceUnitName" value="18_banco_PU"/>
+		<property name="dataSource" ref="data"/>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="databasePlatform" value="org.hibernate.dialect.MySQLDialect"/>
+			</bean>
+		</property>	
+	
+	</bean>
+	
+	<!-- gestion transaccionalidad -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityFactory"/>
+	</bean>
+	<!-- al estar el bean en un .jar independiente, se tiene
+	que instanciar explicitamente con la etiqueta bean-->
+	<bean class="aspectos.ControlBanco"></bean>
+	<!-- permite gestionar las transacciones mediante anotaciones -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+                     
+    <context:annotation-config/>
+    <context:component-scan base-package="modelo.dao,modelo.service"/>
+
+	<aop:aspectj-autoproxy/>
+</beans>

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+    
+        <center>
+            Saldo de la cuenta:<h:outputText value="#{movimientosBean.saldo}"/>
+            <h2>Listado de movimientos</h2>
+            <h:dataTable var="m" value="#{movimientosBean.movimientos}">
+                <h:column>
+                    <f:facet name="header">Tipo</f:facet>
+                    <h:outputText value="#{m.operacion}"/>
+                </h:column> 
+                <h:column>
+                    <f:facet name="header">Cantidad</f:facet>
+                    <h:outputText value="#{m.cantidad}"/>
+                </h:column> 
+                <h:column>
+                    <f:facet name="header">fecha</f:facet>
+                    <h:outputText value="#{m.fecha}"/>
+                </h:column> 
+            
+            </h:dataTable>
+            <br/><br/>
+            <h:link value="Volver" outcome="operaciones"/>
+        </center>
+    </h:body>
+</html>
+
